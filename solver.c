@@ -31,6 +31,23 @@
  */
 void create_room_connections(struct maze_room *room, unsigned int hex) {
     // TODO: implement this function
+    room->north = 0;
+    room->south = 0;
+    room->west = 0;
+    room->east = 0;
+
+    if (hex & 1){
+        room->north = 1;
+    }
+    if (hex & 2){
+        room->south = 1;
+    }
+    if (hex & 4){
+        room->west = 1;
+    }
+    if (hex & 8){
+        room->east = 1;
+    }
 }
 
 /*
@@ -61,6 +78,20 @@ int dfs(int row, int col, int goal_row, int goal_col, int num_rows,
         int num_cols, struct maze_room maze[num_rows][num_cols], FILE *file) {
     Direction directions[4] = { NORTH, SOUTH, EAST, WEST };
     // TODO: implement this function
+    if (row == goal_row && col == goal_col){
+        return 1;
+    }
+
+    struct maze_room *current 
+    current = &maze[row][col];
+    current->visited = 1;
+    for (int d = 0; d < 4; d++){
+        struct maze_room *n;
+        n = get_neighbor(num_rows, num_cols, maze, current, directions[d]);
+        if ()
+    }
+
+
 }
 
 /*
@@ -81,6 +112,16 @@ void decode_maze(int num_rows, int num_cols,
                  struct maze_room maze[num_rows][num_cols],
                  int encoded_maze[num_rows][num_cols]) {
     // TODO: implement this function
+    for (int i = 0; i < num_rows; i++){
+        for (int j = 0; j < num_cols; j++){
+            struct maze_room *c;
+            c = &maze[i][j];
+            c->row = i;
+            c->col = j;
+            c->visited = 0;
+            create_room_connections(*c, encode_maze[i][j]);
+        }
+    }
 }
 
 /*

@@ -16,6 +16,15 @@
  */
 Direction get_opposite_dir(Direction dir) {
     // TODO: implement this function
+    if (dir == EAST){
+        return WEST;
+    }else if (dir == WEST){
+        return EAST;
+    }else if (dir == NORTH){
+        return SOUTH;
+    }else {
+        return NORTH;
+    }
 }
 
 /*
@@ -29,6 +38,14 @@ Direction get_opposite_dir(Direction dir) {
  */
 void shuffle_array(Direction directions[]) {
     // TODO: implement this function
+    for (int i = 0; i < 4; i = i + 1){
+        int random = rand()%(4);
+
+        Direction temp = directions[i];
+        directions[i] = directions[random];
+        directions[random] = temp;
+    }
+
 }
 
 /*
@@ -48,6 +65,73 @@ void shuffle_array(Direction directions[]) {
 void drunken_walk(int row, int col, int num_rows, int num_cols,
                   struct maze_room maze[num_rows][num_cols]) {
     // TODO: implement this function
+    struct maze_room *r;
+    r = &maze[row][col];
+    r->visited = 1;
+
+    Direction directions[] = {EAST, WEST, NORTH, SOUTH};
+    shuffle_array(directions);
+
+    for (int d = 0; d < 4; d = d + 1){
+        struct maze_room *n;
+        n = get_neighbor(num_rows, num_cols, maze, r, directions[d]);
+        if (n == NULL){
+            helper(r, directions[d], 1);
+            // if (directions[d] == EAST){
+            //     r->east = 1;
+            // }if (directions[d] == WEST){
+            //     r->west = 1;
+            // }if (directions[d] == NORTH){
+            //     r->north = 1;
+            // }if (directions[d] == SOUTH){
+            //     r->south = 1;
+            // }
+        }else{
+            if (n->visited == 0){
+                helper(r, directions[d], 0);
+                // if (directions[d] == EAST){
+                //     r->east = 0;
+                // }if (directions[d] == WEST){
+                //     r->west = 0;
+                // }if (directions[d] == NORTH){
+                //     r->north = 0;
+                // }if (directions[d] == SOUTH){
+                //     r->south = 0;
+                // }
+                drunken_walk(n->row, n->col, num_rows, num_cols, maze);
+            }else{
+                Direction dirr = directions[d];
+                second_helper(r, n, dirr);
+
+                // if (get_opposite_dir(directions[d]) == EAST){
+                //     if (n->east == 0){
+                //         r->west = 0;
+                //     }else{
+                //         r->west = 1;
+                //     }
+                // }if (get_opposite_dir(directions[d]) == WEST){
+                //     if (n->west == 0){
+                //         r->east = 0;
+                //     }else{
+                //         r->east = 1;
+                //     }
+                // }if (get_opposite_dir(directions[d]) == NORTH){
+                //     if (n->north == 0){
+                //         r->south = 0;
+                //     }else{
+                //         r->south = 1;
+                //     }
+                // }if (get_opposite_dir(directions[d]) == SOUTH){
+                //     if (n->south == 0){
+                //         r->north = 0;
+                //     }else{
+                //         r->north = 1;
+                //     }
+                // }
+            }
+        }
+        
+    }
 }
 
 /*
@@ -61,8 +145,21 @@ void drunken_walk(int row, int col, int num_rows, int num_cols,
  */
 int encode_room(struct maze_room room) {
     // TODO: implement this function
+    int code = 0;
+    if (room.north == 1){
+        code = code + 1;
+    }
+    if (room.south == 1){
+        code = code + 2;
+    }
+    if (room.west == 1){
+        code = code + 4;
+    }
+    if (room.east == 1){
+        code = code + 8;
+    }
+    return code;
 }
-
 /*
  * Represents a maze_room array as a hexadecimal array based on its connections
  *
@@ -80,6 +177,11 @@ void encode_maze(int num_rows, int num_cols,
                  struct maze_room maze[num_rows][num_cols],
                  int result[num_rows][num_cols]) {
     // TODO: implement this function
+    for (int i = 0; i < num_rows; i++){
+        for (int j = 0; j < num_cols; j++){
+            result[i][j] = encode_room(maze[i][j]);
+        }
+    }
 }
 
 /*
@@ -162,4 +264,17 @@ int main(int argc, char **argv) {
         num_cols = atoi(argv[3]);
     }
     // TODO: implement this function
+    srand(time(NULL));
+    struct maze_room maze[num_rows][num_cols];
+    initialize_maze(num_rows, num_cols, maze);
+
+    int start_row = rand()%(num_rows);
+    int start_col = rand()%(num_cols);
+    drunken_walk(start_row, start_col, num_rows, num_cols, maze);
+
+    int result[num_rows][num_cols];
+    encode_maze(num_rows, num_cols, maze, result);
+    write_encoded_maze_to_file(num_rows, num_cols, result, file_name);
+
+
 }

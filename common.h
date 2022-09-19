@@ -21,6 +21,13 @@ typedef enum { NORTH = 0, SOUTH = 1, WEST = 2, EAST = 3 } Direction;
  */
 struct maze_room {
     // TODO: Fill in the fields you need
+    int row; 
+    int col;
+    int visited; 
+    int north;
+    int east;
+    int south;
+    int west;
     
     // NOTE: ignore this field until you start implementing the solver
     struct maze_room *next;
@@ -34,3 +41,7 @@ struct maze_room *get_neighbor(int num_rows, int num_cols,
 
 void initialize_maze(int num_rows, int num_cols,
            struct maze_room maze[num_rows][num_cols]);
+
+void helper(struct maze_room *r, Direction dir, int n);
+
+void second_helper(struct maze_room *r, struct maze_room *n, Direction dir);
