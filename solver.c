@@ -79,20 +79,66 @@ int dfs(int row, int col, int goal_row, int goal_col, int num_rows,
     Direction directions[4] = { NORTH, SOUTH, EAST, WEST };
     // TODO: implement this function
     if (row == goal_row && col == goal_col){
+        #ifdef FULL
+        fprintf(file, "%d,%d\n", row, col);
+        #endif
         return 1;
     }
 
-    struct maze_room *current 
+    struct maze_room *current; 
     current = &maze[row][col];
     current->visited = 1;
+
+    #ifdef FULL
+    fprintf(file, "%d,%d\n", row, col);
+    #endif
+
     for (int d = 0; d < 4; d++){
         struct maze_room *n;
         n = get_neighbor(num_rows, num_cols, maze, current, directions[d]);
-        if ()
+        if (n != NULL && third_helper(current, n, directions[d]) == 1){
+            current->next = n;
+            if (dfs(n->row, n->col, goal_row, goal_col, num_rows, num_cols, maze, file) == 1){
+                return 1;
+            }
+        }
     }
 
+    #ifdef FULL
+    struct maze_room *b;
+    b = get_back(num_rows, num_cols, maze, current);
+    fprintf(file, "%d,%d\n", b->row, b->col);
+    #endif
+    return 0;
 
 }
+
+int third_helper(struct maze_room *c, struct maze_room *n, Direction dir){
+    if (dir == EAST && c->east == 0 && n->visited == 0){
+        return 1;
+    }else if (dir == WEST && c->west == 0 && n->visited == 0){
+        return 1;
+    }else if (dir == SOUTH && c->south == 0 && n->visited == 0){
+        return 1;
+    }else if (dir == NORTH && c->north == 0 && n->visited == 0){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+struct maze_room *get_back(int num_rows, int num_cols, struct maze_room maze[num_rows][num_cols], struct maze_room *room){
+    Direction directions[4] = { NORTH, SOUTH, EAST, WEST };
+    for (int d = 0; d < 4; d++){
+        struct maze_room *n;
+        n = get_neighbor(num_rows, num_cols, maze, room, directions[d]);
+        if (n != NULL && n->next == room){
+            return n;
+        }
+    }
+    return NULL;
+}
+
 
 /*
  * Decodes an encoded maze and stores the resulting maze room data in the
@@ -119,7 +165,7 @@ void decode_maze(int num_rows, int num_cols,
             c->row = i;
             c->col = j;
             c->visited = 0;
-            create_room_connections(*c, encode_maze[i][j]);
+            create_room_connections(c, encoded_maze[i][j]);
         }
     }
 }
@@ -137,6 +183,14 @@ void decode_maze(int num_rows, int num_cols,
  */
 int print_pruned_path(struct maze_room *room, FILE *file) {
     // TODO: implement this function
+    if (room->next == NULL){
+        fprintf(file, "%d,%d\n", room->row, room->col);
+        return 0;
+    }
+    fprintf(file, "%d,%d\n", room->row, room->col);
+    print_pruned_path(room->next, file);
+    return 1;
+
 }
 
 /*
@@ -221,4 +275,31 @@ int main(int argc, char **argv) {
         goal_col = atoi(argv[8]);
     }
     // TODO: implement this function
+    int result[num_rows][num_cols];
+    struct maze_room maze[num_rows][num_cols];
+    read_encoded_maze_from_file(num_rows, num_cols, result, maze_file_name);
+    decode_maze(num_rows, num_cols, maze, result);
+
+    FILE *f = fopen(path_file_name, "w+");
+    if (f == NULL) {
+        fprintf(stderr, "Error opening file.\n");
+        return 1;
+    }
+
+    #ifdef FULL
+    fprintf(f, "%s\n", "FULL");
+    dfs(start_row, start_col, goal_row, goal_col, num_rows, num_cols, maze, f);
+    #else
+    dfs(start_row, start_col, goal_row, goal_col, num_rows, num_cols, maze, f);
+    fprintf(f, "%s\n", "PRUNED");
+    struct maze_room *first;
+    first = &maze[start_row][start_col];
+    print_pruned_path(first, f);
+    #endif
+
+    int close = fclose(f);
+    if (close == EOF) {
+        fprintf(stderr, "Could not close file.\n");
+        return 1;
+    }
 }

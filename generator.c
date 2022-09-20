@@ -77,57 +77,13 @@ void drunken_walk(int row, int col, int num_rows, int num_cols,
         n = get_neighbor(num_rows, num_cols, maze, r, directions[d]);
         if (n == NULL){
             helper(r, directions[d], 1);
-            // if (directions[d] == EAST){
-            //     r->east = 1;
-            // }if (directions[d] == WEST){
-            //     r->west = 1;
-            // }if (directions[d] == NORTH){
-            //     r->north = 1;
-            // }if (directions[d] == SOUTH){
-            //     r->south = 1;
-            // }
         }else{
             if (n->visited == 0){
                 helper(r, directions[d], 0);
-                // if (directions[d] == EAST){
-                //     r->east = 0;
-                // }if (directions[d] == WEST){
-                //     r->west = 0;
-                // }if (directions[d] == NORTH){
-                //     r->north = 0;
-                // }if (directions[d] == SOUTH){
-                //     r->south = 0;
-                // }
                 drunken_walk(n->row, n->col, num_rows, num_cols, maze);
             }else{
                 Direction dirr = directions[d];
                 second_helper(r, n, dirr);
-
-                // if (get_opposite_dir(directions[d]) == EAST){
-                //     if (n->east == 0){
-                //         r->west = 0;
-                //     }else{
-                //         r->west = 1;
-                //     }
-                // }if (get_opposite_dir(directions[d]) == WEST){
-                //     if (n->west == 0){
-                //         r->east = 0;
-                //     }else{
-                //         r->east = 1;
-                //     }
-                // }if (get_opposite_dir(directions[d]) == NORTH){
-                //     if (n->north == 0){
-                //         r->south = 0;
-                //     }else{
-                //         r->south = 1;
-                //     }
-                // }if (get_opposite_dir(directions[d]) == SOUTH){
-                //     if (n->south == 0){
-                //         r->north = 0;
-                //     }else{
-                //         r->north = 1;
-                //     }
-                // }
             }
         }
         

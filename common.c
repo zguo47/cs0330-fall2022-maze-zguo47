@@ -91,6 +91,7 @@ void initialize_maze(int num_rows, int num_cols,
             maze[r][c].south = 2;
             maze[r][c].east = 2;
             maze[r][c].west = 2;
+            maze[r][c].next = NULL;
         }
     }
     return;
@@ -136,4 +137,6 @@ void second_helper(struct maze_room *r, struct maze_room *n, Direction dir){
         }
     }
 }
+
+
 
