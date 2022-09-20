@@ -78,6 +78,10 @@ int dfs(int row, int col, int goal_row, int goal_col, int num_rows,
         int num_cols, struct maze_room maze[num_rows][num_cols], FILE *file) {
     Direction directions[4] = { NORTH, SOUTH, EAST, WEST };
     // TODO: implement this function
+    struct maze_room *current; 
+    current = &maze[row][col];
+
+
     if (row == goal_row && col == goal_col){
         #ifdef FULL
         fprintf(file, "%d,%d\n", row, col);
@@ -85,8 +89,6 @@ int dfs(int row, int col, int goal_row, int goal_col, int num_rows,
         return 1;
     }
 
-    struct maze_room *current; 
-    current = &maze[row][col];
     current->visited = 1;
 
     #ifdef FULL
@@ -165,6 +167,7 @@ void decode_maze(int num_rows, int num_cols,
             c->row = i;
             c->col = j;
             c->visited = 0;
+            c->next = NULL;
             create_room_connections(c, encoded_maze[i][j]);
         }
     }
