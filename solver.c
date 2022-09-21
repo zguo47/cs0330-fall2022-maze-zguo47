@@ -50,6 +50,17 @@ void create_room_connections(struct maze_room *room, unsigned int hex) {
     }
 }
 
+/*
+ * A helper function for dfs. Return 1 if for a maze_room, on a given direction, there exist a neighbor room that has not been visited. 
+ *
+ * Parameters:
+ *  - *c: the current maze_room
+ *  - *n: the neighbor of the current maze_room
+ *  - dir: the given direction
+ *
+ * Returns:
+ *  - 1 if there is such neighbor, 0 if otherwise. 
+ */
 int third_helper(struct maze_room *c, struct maze_room *n, Direction dir){
     if (dir == EAST && c->east == 0 && n->visited == 0){
         return 1;
@@ -64,6 +75,19 @@ int third_helper(struct maze_room *c, struct maze_room *n, Direction dir){
     }
 }
 
+/*
+ * A helper function that helps get the maze_room with its next field pointing towards the current maze_room. 
+ *
+ * Parameters:
+ *  - num_rows: the number of the rows in the maze
+ *  - num_cols: the number of columns in the maze
+ *  - maze: a 2D array of uninitialized maze_rooms (to be initialized in
+ *     this function)
+ *  - *room: the current maze_room
+ *
+ * Returns:
+ *  - the maze_room with its next pointing to the current maze_room. return Null if there is no such room. 
+ */
 struct maze_room *get_back(int num_rows, int num_cols, struct maze_room maze[num_rows][num_cols], struct maze_room *room){
     Direction directions[4] = { NORTH, SOUTH, EAST, WEST };
     for (int d = 0; d < 4; d++){

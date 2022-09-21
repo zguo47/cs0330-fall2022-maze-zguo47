@@ -97,6 +97,17 @@ void initialize_maze(int num_rows, int num_cols,
     return;
 }
 
+/*
+ * A helper function that will assign a given value to a maze_room's field  corresponding to the given direction. 
+ *
+ * Parameters:
+ *  - *r : the maze_room to be assigned value to its field.
+ *  - dir: the given direction to determine the field to assign
+ *  - n: the given value to be assigned
+ *
+ * Returns:
+ *  - nothing 
+ */
 void helper(struct maze_room *r, Direction dir, int n){
 
     if (dir == EAST){
@@ -110,6 +121,17 @@ void helper(struct maze_room *r, Direction dir, int n){
     }
 }
 
+/*
+ * A helper function for drunken_walk. If a given neighbor of the current room has an opening or wall in the opposite of a given direction, store a wall for the current roon in the given direction.
+ *
+ * Parameters:
+ *  - *r: the current maze_room
+ *  - *n: the neighbor of the current maze_room
+ *  - dir: the given direction
+ *
+ * Returns:
+ *  - nothing
+ */
 void second_helper(struct maze_room *r, struct maze_room *n, Direction dir){
     if (dir == EAST){
         if (n->west == 0){
