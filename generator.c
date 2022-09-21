@@ -299,6 +299,7 @@ int main(int argc, char **argv) {
     int result[num_rows][num_cols];
     encode_maze(num_rows, num_cols, maze, result);
     write_encoded_maze_to_file(num_rows, num_cols, result, file_name);
+    return 0;
 
 
 }

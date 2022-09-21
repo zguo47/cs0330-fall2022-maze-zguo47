@@ -348,5 +348,6 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Could not close file.\n");
         return 1;
     }
+    return 0;
 
 }
