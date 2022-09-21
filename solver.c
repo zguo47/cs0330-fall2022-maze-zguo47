@@ -291,11 +291,11 @@ int main(int argc, char **argv) {
             return 1;
         }
     }
-    FILE *d = fopen(maze_file_name, "w+");
-    if (d == NULL) {
-        fprintf(stderr, "Error opening file.\n");
-        return 1;
-    }
+    // FILE *d = fopen(maze_file_name, "w+");
+    // if (d == NULL) {
+    //     fprintf(stderr, "Error opening file.\n");
+    //     return 1;
+    // }
 
     // TODO: implement this function
     int result[num_rows][num_cols];
@@ -327,9 +327,9 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Could not close file.\n");
         return 1;
     }
-    int closee = fclose(d);
-    if (closee == EOF) {
-        fprintf(stderr, "Could not close file.\n");
-        return 1;
-    }
+    // int closee = fclose(d);
+    // if (closee == EOF) {
+    //     fprintf(stderr, "Could not close file.\n");
+    //     return 1;
+    // }
 }
