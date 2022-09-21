@@ -325,4 +325,9 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Could not close file.\n");
         return 1;
     }
+    int closee = fclose(d);
+    if (closee == EOF) {
+        fprintf(stderr, "Could not close file.\n");
+        return 1;
+    }
 }
