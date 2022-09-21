@@ -291,17 +291,19 @@ int main(int argc, char **argv) {
             return 1;
         }
     }
+    FILE *d = fopen(maze_file_name, "w+");
+    if (d == NULL) {
+        fprintf(stderr, "Error opening file.\n");
+        return 1;
+    }
+
     // TODO: implement this function
     int result[num_rows][num_cols];
     struct maze_room maze[num_rows][num_cols];
     read_encoded_maze_from_file(num_rows, num_cols, result, maze_file_name);
     decode_maze(num_rows, num_cols, maze, result);
 
-    FILE *d = fopen(maze_file_name, "w+");
-    if (d == NULL) {
-        fprintf(stderr, "Error opening file.\n");
-        return 1;
-    }
+
 
     FILE *f = fopen(path_file_name, "w+");
     if (f == NULL) {
