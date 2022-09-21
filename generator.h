@@ -12,3 +12,6 @@ int encode_room(struct maze_room room);
 void encode_maze(int num_rows, int num_cols,
                  struct maze_room maze[num_rows][num_cols],
                  int result[num_rows][num_cols]);
+void helper(struct maze_room *r, Direction dir, int n);
+
+void second_helper(struct maze_room *r, struct maze_room *n, Direction dir);

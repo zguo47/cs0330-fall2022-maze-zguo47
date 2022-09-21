@@ -42,7 +42,5 @@ struct maze_room *get_neighbor(int num_rows, int num_cols,
 void initialize_maze(int num_rows, int num_cols,
            struct maze_room maze[num_rows][num_cols]);
 
-void helper(struct maze_room *r, Direction dir, int n);
 
-void second_helper(struct maze_room *r, struct maze_room *n, Direction dir);
 
