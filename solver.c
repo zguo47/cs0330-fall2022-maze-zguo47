@@ -220,7 +220,7 @@ int read_encoded_maze_from_file(int num_rows, int num_cols,
     FILE *f = fopen(file_name, "r");
     if (f == NULL) {
         fprintf(stderr, "Error opening file.\n");
-        return 1;
+        exit(1);
     }
     // read each hex value into 2D array
     for (int i = 0; i < num_rows; i++) {
@@ -230,7 +230,7 @@ int read_encoded_maze_from_file(int num_rows, int num_cols,
             encoded_maze[i][j] = encoded_room;
             if (err < 0) {
                 fprintf(stderr, "Reading from file failed");
-                return 1;
+                exit(1);
             }
         }
     }
@@ -238,7 +238,7 @@ int read_encoded_maze_from_file(int num_rows, int num_cols,
     int close = fclose(f);
     if (close == EOF) {
         fprintf(stderr, "Could not close file.\n");
-        return 1;
+        exit(1);
     }
     return 0;
 }
@@ -291,19 +291,13 @@ int main(int argc, char **argv) {
             return 1;
         }
     }
-    // FILE *d = fopen(maze_file_name, "w+");
-    // if (d == NULL) {
-    //     fprintf(stderr, "Error opening file.\n");
-    //     return 1;
-    // }
+
 
     // TODO: implement this function
     int result[num_rows][num_cols];
     struct maze_room maze[num_rows][num_cols];
     read_encoded_maze_from_file(num_rows, num_cols, result, maze_file_name);
     decode_maze(num_rows, num_cols, maze, result);
-
-
 
     FILE *f = fopen(path_file_name, "w+");
     if (f == NULL) {
@@ -327,9 +321,5 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Could not close file.\n");
         return 1;
     }
-    // int closee = fclose(d);
-    // if (closee == EOF) {
-    //     fprintf(stderr, "Could not close file.\n");
-    //     return 1;
-    // }
+
 }
