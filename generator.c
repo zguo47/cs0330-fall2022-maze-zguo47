@@ -218,6 +218,10 @@ int main(int argc, char **argv) {
         file_name = argv[1];
         num_rows = atoi(argv[2]);
         num_cols = atoi(argv[3]);
+        if (num_cols <= 0 || num_rows <= 0){
+            printf("invalid number of rows or column, should be greater than 0.\n");
+            return 1;
+        }
     }
     // TODO: implement this function
     srand(time(NULL));
